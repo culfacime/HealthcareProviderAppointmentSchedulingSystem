@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Healthcare.Core.DTOs.EntityDtos;
 using Healthcare.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace Healthcare.Core.Validators
 {
 
-    public class AppointmentValidator : AbstractValidator<Appointment>
+    public class AppointmentValidator : AbstractValidator<AppointmentDto>
     {
         public AppointmentValidator()
         {

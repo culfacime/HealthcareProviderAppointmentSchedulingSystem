@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using Healthcare.Core.DTOs.EntityDtos;
 using Healthcare.Core.Entities;
 
 namespace Healthcare.Core.Validators
 {
-    public class PatientValidator : AbstractValidator<Patient>
+    public class PatientValidator : AbstractValidator<PatientDto>
     {
         public PatientValidator()
         {
