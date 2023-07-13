@@ -1,3 +1,7 @@
+using DotNetEnv;
+using Healthcare.API.Extensions;
+using Healthcare.Core.DB;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +16,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+EnvExtensions.LoadEnv();
 
-
+builder.Services.AddDbContext<HealthcareDbContext>(x =>
+{
+    x.UseSqlServer(Env.GetString("DB_CONNECTION"));
+});
 
 var app = builder.Build();
 

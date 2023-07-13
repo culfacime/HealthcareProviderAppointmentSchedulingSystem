@@ -28,9 +28,6 @@ namespace Healthcare.Core.DB
 
         public virtual DbSet<Patient> Patient { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer("Server=10.0.4.116; Initial Catalog = Healthcare; Persist Security Info=True; User ID = healthuser; Password =1qaz2wsx++; TrustServerCertificate=True");
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Appointment>(entity =>
