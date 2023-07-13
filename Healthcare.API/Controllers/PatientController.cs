@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Healthcare.API.Controllers
+namespace Healthcare.API.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class PatientController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class PatientController : ControllerBase
+
+    private readonly ILogger<PatientController> _logger;
+
+    public PatientController(ILogger<PatientController> logger)
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        _logger = logger;
+    }
 
-        private readonly ILogger<PatientController> _logger;
-
-        public PatientController(ILogger<PatientController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet(Name = "GetPatients")]
-        public IActionResult Get()
-        {
-            return Ok("Test");
-        }
+    [HttpGet(Name = "GetPatients")]
+    public IActionResult Get()
+    {
+        return Ok("Test");
     }
 }
