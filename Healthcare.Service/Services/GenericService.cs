@@ -1,4 +1,5 @@
-﻿using Healthcare.Core.Repositories;
+﻿using Healthcare.Core.Exceptions;
+using Healthcare.Core.Repositories;
 using Healthcare.Core.Services;
 using Healthcare.Core.UnitOfWorks;
 using System;
