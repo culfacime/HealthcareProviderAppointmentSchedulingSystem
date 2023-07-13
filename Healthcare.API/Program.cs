@@ -8,6 +8,7 @@ using Healthcare.Core.UnitOfWorks;
 using Healthcare.Repository.Repository;
 using Healthcare.Repository.UnitOfWorks;
 using Healthcare.Service.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -43,6 +44,20 @@ builder.Services.AddDbContext<HealthcareDbContext>(x =>
 {
     x.UseSqlServer(Env.GetString("DB_CONNECTION"));
 });
+
+builder.Services.AddApiVersioning(x =>
+{
+    x.DefaultApiVersion = new ApiVersion(1, 0);
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.ReportApiVersions = true;
+});
+
+builder.Services.AddVersionedApiExplorer(x =>
+{
+    x.GroupNameFormat = "'v'VVV";
+    x.SubstituteApiVersionInUrl = true;
+});
+
 
 var app = builder.Build();
 

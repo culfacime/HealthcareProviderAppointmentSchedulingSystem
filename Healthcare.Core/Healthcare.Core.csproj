@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Mapping\" />
     <Folder Include="Migrations\" />
     <Folder Include="Validators\" />
