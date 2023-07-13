@@ -1,24 +1,29 @@
 using DotNetEnv;
+using FluentValidation.AspNetCore;
 using Hangfire;
 using Healthcare.API.Extensions;
+using Healthcare.API.Filters;
 using Healthcare.Core.DB;
 using Healthcare.Core.Repositories;
 using Healthcare.Core.Services;
 using Healthcare.Core.UnitOfWorks;
+using Healthcare.Core.Validators;
 using Healthcare.Repository.Repository;
 using Healthcare.Repository.UnitOfWorks;
 using Healthcare.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
-
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -56,6 +61,17 @@ builder.Services.AddVersionedApiExplorer(x =>
 {
     x.GroupNameFormat = "'v'VVV";
     x.SubstituteApiVersionInUrl = true;
+});
+
+builder.Services
+.AddFluentValidation(fv =>
+{
+    fv.DisableDataAnnotationsValidation = true;
+    fv.RegisterValidatorsFromAssemblyContaining<PatientValidator>();
+    fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    fv.RegisterValidatorsFromAssembly(Assembly.GetEntryAssembly());
+    fv.AutomaticValidationEnabled = true;
+    fv.ValidatorOptions.LanguageManager.Culture = new System.Globalization.CultureInfo("tr");
 });
 
 
