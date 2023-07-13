@@ -11,7 +11,7 @@ namespace Healthcare.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/V{version:apiversion}/[controller]")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
     public class AppointmentsController : BaseController
     {
         private readonly IGenericService<Appointment> _appointmentService;
