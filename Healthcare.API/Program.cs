@@ -4,6 +4,7 @@ using Hangfire;
 using Healthcare.API.Extensions;
 using Healthcare.API.Filters;
 using Healthcare.Core.DB;
+using Healthcare.Core.Mapping;
 using Healthcare.Core.Repositories;
 using Healthcare.Core.Services;
 using Healthcare.Core.UnitOfWorks;
@@ -74,6 +75,8 @@ builder.Services
     fv.ValidatorOptions.LanguageManager.Culture = new System.Globalization.CultureInfo("tr");
 });
 
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 
