@@ -9,8 +9,8 @@
   <ItemGroup>
     <Folder Include="DB\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Entities\" />
     <Folder Include="Mapping\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Validators\" />
     <Folder Include="Services\" />
   </ItemGroup>
