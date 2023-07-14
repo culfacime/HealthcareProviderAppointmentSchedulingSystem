@@ -23,7 +23,7 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
             options.SwaggerDoc(
                 description.GroupName,
                 CreateVersionInfo(description));
-            var filePath = Path.Combine(AppContext.BaseDirectory, "SwaggerSummary.xml");
+            var filePath = Path.Combine(AppContext.BaseDirectory, "Healthcare.API.xml");
             options.IncludeXmlComments(filePath);
         }
     }

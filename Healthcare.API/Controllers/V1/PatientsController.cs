@@ -13,7 +13,7 @@ namespace Healthcare.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/V{version:apiversion}/[controller]")]
     [ApiController]
-  //  [Authorize]
+    [Authorize]
     public class PatientsController : BaseController
     {
         private readonly IGenericService<Patient> _patientService;
@@ -84,6 +84,12 @@ namespace Healthcare.API.Controllers.V1
         public async Task<IActionResult> DeletePatient(Guid id)
         {
             var patient = await _patientService.FirstOrDefaultAsync(x => x.PatientId == id);
+
+            if (patient is null)
+            {
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Success(404, new List<string> { "Not found" }));
+            }
+
 
             await _patientService.RemoveAsync(patient);
             _unitOfWork.Commit();

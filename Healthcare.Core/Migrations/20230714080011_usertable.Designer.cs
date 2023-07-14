@@ -4,6 +4,7 @@ using Healthcare.Core.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Healthcare.Core.Migrations
 {
     [DbContext(typeof(HealthcareDbContext))]
-    partial class HealthcareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230714080011_usertable")]
+    partial class usertable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,15 +147,6 @@ namespace Healthcare.Core.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("User");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("1b2ec0b9-84c6-49b1-8b5d-23bc605fef5f"),
-                            Active = true,
-                            Password = "123456",
-                            UserName = "Test"
-                        });
                 });
 
             modelBuilder.Entity("Healthcare.Core.Entities.Appointment", b =>

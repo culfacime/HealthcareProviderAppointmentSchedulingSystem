@@ -13,7 +13,7 @@ namespace Healthcare.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/V{version:apiversion}/[controller]")]
     [ApiController]
-  //  [Authorize]
+    [Authorize]
     public class AppointmentsController : BaseController
     {
         private readonly IGenericService<Appointment> _appointmentService;
@@ -84,6 +84,11 @@ namespace Healthcare.API.Controllers.V1
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var appointment = await _appointmentService.FirstOrDefaultAsync(x => x.AppointmentId == id);
+
+            if (appointment is null)
+            {
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Success(404, new List<string> { "Not found" }));
+            }
 
             await _appointmentService.RemoveAsync(appointment);
             _unitOfWork.Commit();

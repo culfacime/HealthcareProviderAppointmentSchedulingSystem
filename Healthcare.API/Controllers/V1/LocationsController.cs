@@ -4,6 +4,7 @@ using Healthcare.Core.DTOs.EntityDtos;
 using Healthcare.Core.Entities;
 using Healthcare.Core.Services;
 using Healthcare.Core.UnitOfWorks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,7 +13,7 @@ namespace Healthcare.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route("api/V{version:apiversion}/[controller]")]
     [ApiController]
-    //  [Authorize]
+    [Authorize]
     public class LocationsController : BaseController
     {
         private readonly IGenericService<Location> _locationService;
@@ -81,6 +82,12 @@ namespace Healthcare.API.Controllers.V1
         public async Task<IActionResult> DeleteLocation(int id)
         {
             var location = await _locationService.FirstOrDefaultAsync(x => x.LocationId == id);
+
+            if (location is null)
+            {
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Success(404, new List<string> { "Not found" }));
+            }
+
 
             await _locationService.RemoveAsync(location);
             _unitOfWork.Commit();

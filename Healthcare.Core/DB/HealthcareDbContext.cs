@@ -62,8 +62,25 @@ namespace Healthcare.Core.DB
             {
                 entity.Property(e => e.LocationId).ValueGeneratedOnAdd();
                 entity.Property(e => e.LocationName)
-                    .HasMaxLength(5250)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
+            });
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.UserId).HasDefaultValueSql("(newid())"); ;
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                UserId = Guid.NewGuid(),
+                UserName = "Test",
+                Password = "123456",
+                Active = true
             });
 
             OnModelCreatingPartial(modelBuilder);

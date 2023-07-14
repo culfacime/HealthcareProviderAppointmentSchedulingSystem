@@ -18,5 +18,5 @@ namespace Healthcare.Core.Entities
         public string? MedicalHistory { get; set; }
 
         public virtual ICollection<Appointment> Appointment { get; set; }
-    }
+    } 
 }
