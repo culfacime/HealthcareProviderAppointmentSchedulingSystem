@@ -33,7 +33,7 @@ namespace Healthcare.API.Controllers.V1
         }
 
 
-     
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatient(Guid id)
         {
