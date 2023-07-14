@@ -6,6 +6,5 @@
 
         public string LocationName { get; set; } = null!;
 
-        public List<AppointmentDto> Appointment { get; set; }
     }
 }

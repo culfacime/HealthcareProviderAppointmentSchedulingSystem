@@ -17,8 +17,6 @@ namespace Healthcare.Core.DTOs.EntityDtos
         public bool Reminded { get; set; }
         public DateTime RemindingDate { get; set; }
 
-        public PatientDto Patient { get; set; }
-        public LocationDto Location { get; set; }
 
     }   
 }

@@ -17,6 +17,5 @@ namespace Healthcare.Core.DTOs.EntityDtos
         public string Address { get; set; }
         public string? MedicalHistory { get; set; }
 
-        public List<AppointmentDto> Appointment { get; set; }
     }
 }
