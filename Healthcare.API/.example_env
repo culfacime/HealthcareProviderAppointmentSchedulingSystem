@@ -1,0 +1,7 @@
+DB_CONNECTION="Server=x.x.x.x; Initial Catalog = Healthcare; Persist Security Info=True; User ID = xuser; Password =password; TrustServerCertificate=True"
+
+JWT_Key="key"
+JWT_Issuer="issuer"
+JWT_Audience="audience"
+JWT_Subject="subject"
+  
