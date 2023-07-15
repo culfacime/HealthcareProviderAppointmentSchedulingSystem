@@ -25,7 +25,7 @@ namespace Healthcare.API.Jobs
         {
             lock (myLock)
             {
-                var appointmentList = _appointmentService.GetList(x => x.Reminded == false && x.RemindingDate >= DateTime.Now, includes: new string[] { "Patient","Location" }).ToList();
+                var appointmentList = _appointmentService.GetList(x => x.Reminded == false && x.RemindingDate <= DateTime.Now, includes: new string[] { "Patient","Location" }).ToList();
 
                 foreach(Appointment appointment in appointmentList)
                 {
