@@ -4,6 +4,7 @@ using Hangfire;
 using Healthcare.API.Configurations.ApiVersion;
 using Healthcare.API.Extensions;
 using Healthcare.API.Filters;
+using Healthcare.API.Jobs;
 using Healthcare.Core.DB;
 using Healthcare.Core.Mapping;
 using Healthcare.Core.Repositories;
@@ -67,31 +68,33 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
-
+builder.Services.AddScoped(typeof(ReminderJob));
+builder.Services.AddScoped(typeof(IEmailService),typeof(EmailService));
+builder.Services.AddScoped(typeof(ISmsService),typeof(SmsService));
 
 EnvExtensions.LoadEnv();
 
-var jwtKey = Env.GetString("JWT_Key");
-
-//JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+builder.Services.AddAuthentication(opt =>
 {
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = Env.GetString("JWT_Issuer"),
+                ValidAudience = Env.GetString("JWT_Audience"),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Env.GetString("JWT_Key")))
+            };
+        });
 
-        ValidAudience = Env.GetString("JWT_Audience"),
-
-        ValidIssuer = Env.GetString("JWT_Issuer"),
-
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-    };
-    options.Authority = "https://localhost:7072";
-});
-
+builder.Services.AddAuthorization();
 
 builder.Services.AddHangfire(configuration => configuration
         .UseSqlServerStorage(Env.GetString("DB_CONNECTION"), new Hangfire.SqlServer.SqlServerStorageOptions
@@ -121,8 +124,7 @@ builder.Services.AddVersionedApiExplorer(x =>
     x.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services
-.AddFluentValidation(fv =>
+builder.Services.AddFluentValidation(fv =>
 {
     fv.DisableDataAnnotationsValidation = true;
     fv.RegisterValidatorsFromAssemblyContaining<PatientValidator>();
@@ -170,10 +172,20 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 app.UseHangfireDashboard();
 
-app.UseHttpsRedirection();
+using var scope = app.Services.CreateScope();
+var reminder = scope.ServiceProvider.GetRequiredService<ReminderJob>();
 
+
+RecurringJob.AddOrUpdate(
+    "reminderJob",
+    () => reminder.Run(),
+    Cron.Hourly());
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
